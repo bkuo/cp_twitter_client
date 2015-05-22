@@ -7,5 +7,10 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_submit">Tweet</string>
+    <string name="title_activity_compose">ComposeActivity</string>
+    <string name="title_activity_tweet_detail">TweetDetailActivity</string>
+    <string name="action_compose">Compose</string>
+    <string name="charCount">140</string>
 
 </resources>

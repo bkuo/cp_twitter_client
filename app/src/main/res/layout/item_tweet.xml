@@ -26,6 +26,26 @@
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvUsername"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_alignBottom="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\@handle"
+        android:id="@+id/tvHandle"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvUsername"
+        android:layout_toEndOf="@+id/tvUsername" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3m"
+        android:id="@+id/tvCreatedAt"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvHandle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="right" />
+
 </RelativeLayout>

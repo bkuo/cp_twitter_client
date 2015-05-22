@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Tweet {
 
-    private String createdAt;
+    private long createdAt;
     private long uid;
     private String body;
     private User user;
@@ -21,9 +23,12 @@ public class Tweet {
         try {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
-            tweet.createdAt = jsonObject.getString("created_at");
+            SimpleDateFormat parserSDF=new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+            tweet.createdAt =parserSDF.parse( jsonObject.getString("created_at")).getTime();
             tweet.user  = User.fromJson(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e){
             e.printStackTrace();
         }
         return tweet;
@@ -43,7 +48,7 @@ public class Tweet {
     }
     public User getUser(){return user;}
 
-    public String getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
