@@ -18,34 +18,46 @@ import java.util.List;
 /**
  * Created by bkuo on 5/21/15.
  */
-public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
+public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     public TweetsArrayAdapter(Context context, List<Tweet> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        ViewHolder viewholder;
         Tweet tweet = getItem(position);
-        if(convertView==null){
-            convertView= LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+            viewholder = new ViewHolder();
+            viewholder.ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+            viewholder.tvUserName = (TextView) convertView.findViewById(R.id.tvUsername);
+            viewholder.tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+            viewholder.tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
+            convertView.setTag(viewholder);
+        } else {
+            viewholder = (ViewHolder) convertView.getTag();
         }
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUsername);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
-        tvUserName.setText(tweet.getUser().getScreenName());
-        tvCreatedAt.setText(
-                ((String) DateUtils.getRelativeTimeSpanString(tweet.getCreatedAt() ,
+
+        viewholder.tvUserName.setText(tweet.getUser().getScreenName());
+        viewholder.tvCreatedAt.setText(
+                ((String) DateUtils.getRelativeTimeSpanString(tweet.getCreatedAt(),
                         System.currentTimeMillis(),
                         DateUtils.MINUTE_IN_MILLIS,
                         DateUtils.FORMAT_ABBREV_RELATIVE
                 )).replaceFirst("(\\d+) (\\S).*", "$1$2")
         );
 
-        tvBody.setText(tweet.getBody());
-        ivProfileImage.setImageResource(0);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        viewholder.tvBody.setText(tweet.getBody());
+        viewholder.ivProfileImage.setImageResource(0);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewholder.ivProfileImage);
         return convertView;
+    }
+
+    private class ViewHolder {
+        public TextView tvUserName;
+        public ImageView ivProfileImage;
+        public TextView tvBody;
+        public TextView tvCreatedAt;
     }
 }

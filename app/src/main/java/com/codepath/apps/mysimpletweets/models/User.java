@@ -3,10 +3,12 @@ package com.codepath.apps.mysimpletweets.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by bkuo on 5/21/15.
  */
-public class User {
+public class User implements Serializable {
     private String profileImageUrl;
 
     public String getProfileImageUrl() {
@@ -29,15 +31,28 @@ public class User {
     private String name;
     private String screenName;
 
+    public User(long uid, String name, String screenName, String profileImageUrl) {
+        this.name = name;
+        this.uid = uid;
+        this.screenName = screenName;
+        this.profileImageUrl = profileImageUrl;
+    }
+    public User(){}
+
     public static User fromJson(JSONObject json) {
-        User u = new User();
+        User u;
+
         try {
-            u.name = json.getString("name");
-            u.uid = json.getLong("id");
-            u.screenName = json.getString("screen_name");
-            u.profileImageUrl = json.getString("profile_image_url");
+            u = new User(
+                    json.getLong("id"),
+                    json.getString("name"),
+                    json.getString("screen_name"),
+                    json.getString("profile_image_url")
+            );
+
         } catch (JSONException e) {
             e.printStackTrace();
+            u = new User();
         }
         return u;
     }

@@ -15,6 +15,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.compose.ComposeActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -32,6 +33,7 @@ public class TimelineActivity extends ActionBarActivity {
     private TweetsArrayAdapter aTweets;
     private List<Tweet> tweets;
     private SwipeRefreshLayout swipeContainer;
+    private User current_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class TimelineActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_compose) {
             Intent i = new Intent(this, ComposeActivity.class);
+            i.putExtra("data", current_user);
             startActivityForResult(i, ComposeActivity.requestCode);
         }
 
