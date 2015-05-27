@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TimelineActivity extends ActionBarActivity {
 
@@ -102,15 +104,22 @@ public class TimelineActivity extends ActionBarActivity {
             }
         });
         requestCurrentUser();
-        populateTimeline();
+        populateTimelinefromDb();
     }
 
+    private  void populateTimelinefromDb(){
+        List<Tweet> tweets = new Select().from(Tweet.class).orderBy("uid DESC").limit(100).execute();
+        Long max_uid = new Select("max(uid)").from(Tweet.class).executeSingle();
+        aTweets.addAll();
+
+    }
     private void populateCurrentUser(String screen_name) {
         client.getUserByScreenName(screen_name, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TWEEEEEET", response.toString());
                 current_user = User.fromJson(response);
+                current_user.save();
             }
 
             @Override

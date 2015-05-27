@@ -1,5 +1,9 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,15 +12,28 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 /**
  * Created by bkuo on 5/21/15.
  */
-public class Tweet implements Serializable {
+@Table(name="Tweets")
+public class Tweet extends Model implements Serializable {
 
+    @Column(name = "createdAt")
     private long createdAt;
+
+    @Column(name = "uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
+    @Column(name = "body")
     private String body;
+    @Column(name = "in_reply_to")
+    private Long in_reply_to;
+    @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    private User user;
+
+    @Column(name = "retweet_count")
+    private int retweet_count;
+    @Column(name = "favorite_count")
+    private int favorite_count;
 
     public Long getIn_reply_to() {
         return in_reply_to;
@@ -26,8 +43,6 @@ public class Tweet implements Serializable {
         this.in_reply_to = in_reply_to;
     }
 
-    private Long in_reply_to;
-    private User user;
 
     public int getRetweet_count() {
         return retweet_count;
@@ -45,9 +60,6 @@ public class Tweet implements Serializable {
         this.favorite_count = favorite_count;
     }
 
-    private int retweet_count;
-    private int favorite_count;
-
     public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
     }
@@ -64,11 +76,15 @@ public class Tweet implements Serializable {
         this.user = user;
     }
 
-    public static Tweet fromJSON(JSONObject jsonObject) {
+    public static Tweet findOrCreateFromJson(JSONObject jsonObject) {
+        Long rId = jsonObject.optLong("id");
+        if(rId!=null){
+            
+        }
         Tweet tweet = new Tweet();
         try {
-            tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
+            tweet.body = jsonObject.getString("text");
             tweet.retweet_count = jsonObject.optInt("retweet_count", 0);
             tweet.favorite_count = jsonObject.optInt("favorite_count", 0);
             SimpleDateFormat parserSDF = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
@@ -81,18 +97,22 @@ public class Tweet implements Serializable {
         }
         return tweet;
     }
+    
 
     public static ArrayList<Tweet> fromJSONArray(JSONArray jsonArray) {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
-                tweets.add(Tweet.fromJSON(jsonArray.getJSONObject(i)));
+                tweets.add(Tweet.findOrCreateFromJson(jsonArray.getJSONObject(i)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return tweets;
 
+    }
+    public Tweet(){
+        super();
     }
 
     public User getUser() {
