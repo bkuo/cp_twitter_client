@@ -176,7 +176,7 @@ public class TimelineActivity extends ActionBarActivity {
         if (id == R.id.action_compose) {
             Intent i = new Intent(this, ComposeActivity.class);
             i.putExtra("data", current_user);
-            startActivityForResult(i, ComposeActivity.requestCode);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

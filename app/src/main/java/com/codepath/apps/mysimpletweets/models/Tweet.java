@@ -19,6 +19,22 @@ public class Tweet {
 
     private User user;
 
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public static Tweet fromJSON(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
         try {

@@ -36,7 +36,7 @@ public class TwitterClient extends OAuthBaseClient {
     }
 
 
-    public void getHomeTimelineBefore(AsyncHttpResponseHandler handler, Long since_id) {
+    public void getHomeTimelineSince(AsyncHttpResponseHandler handler, Long since_id) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", 25);
@@ -47,7 +47,7 @@ public class TwitterClient extends OAuthBaseClient {
         Log.d("TWEEEEEEET", handler.getRequestURI().toString());
     }
 
-    public void getHomeTimelineSince(AsyncHttpResponseHandler handler, Long max_id) {
+    public void getHomeTimelineBefore(AsyncHttpResponseHandler handler, Long max_id) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", 25);
@@ -62,7 +62,9 @@ public class TwitterClient extends OAuthBaseClient {
         String apiUrl = getApiUrl("/statuses/update.json");
         RequestParams params = new RequestParams();
         params.put("status", tweet.getBody());
-        getClient().get(apiUrl, params, handler);
+        RequestHandle r = getClient().post(apiUrl, params, handler);
+        Log.d("TWEEEEEEET", handler.getRequestURI().toString());
+
     }
 
     public void getCurrentScreenName(AsyncHttpResponseHandler handler) {
