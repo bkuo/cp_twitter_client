@@ -25,16 +25,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TimelineActivity extends ActionBarActivity {
 
     private TwitterClient client;
     private ListView lvTweets;
     private TweetsArrayAdapter aTweets;
-    private List<Tweet> tweets;
+    private ArrayList<Tweet> tweets;
     private SwipeRefreshLayout swipeContainer;
     private User current_user;
+    private Long maxId;
+    private Long sinceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,29 @@ public class TimelineActivity extends ActionBarActivity {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-//                nextPage(page);
-            }
+                Log.d("TWEEEEEEET",  "loading before " + maxId);
+                client.getHomeTimelineBefore(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        Log.d("TWEEEEEET", response.toString());
+                        tweets = Tweet.fromJSONArray(response);
+                        for (int i = 0; i < tweets.size(); i++) {
+                            if (maxId == null || tweets.get(i).getUid() < maxId)
+                                maxId = tweets.get(i).getUid();
+                            if (sinceId==null || tweets.get(i).getUid() >  sinceId)
+                                sinceId = tweets.get(i).getUid();
+                        }
+                        aTweets.addAll(tweets);
+                        Log.d("TWEEEEEET", aTweets.toString());
+                        swipeContainer.setRefreshing(false);
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("TWEEEEEET", errorResponse.toString());
+                    }
+                }, maxId);            }
         });
         lvTweets.setAdapter(aTweets);
         swipeContainer.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
@@ -75,13 +97,13 @@ public class TimelineActivity extends ActionBarActivity {
         client.getUserByScreenName(screen_name, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("TWEET", response.toString());
+                Log.d("TWEEEEEET", response.toString());
                 current_user = User.fromJson(response);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("TWEET", errorResponse.toString());
+                Log.d("TWEEEEEET", errorResponse.toString());
             }
         });
 
@@ -91,7 +113,7 @@ public class TimelineActivity extends ActionBarActivity {
         client.getCurrentScreenName(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("TWEET", response.toString());
+                Log.d("TWEEEEEET", response.toString());
                 try {
                     String screen_name = response.getString("screen_name");
                     populateCurrentUser(screen_name);
@@ -103,29 +125,36 @@ public class TimelineActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("TWEET", errorResponse.toString());
+                Log.d("TWEEEEEET", errorResponse.toString());
             }
         });
 
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        Log.d("TWEEEEEEET",  "loading after " + sinceId);
+        client.getHomeTimelineSince(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("TWEET", response.toString());
+                Log.d("TWEEEEEET", response.toString());
                 tweets = Tweet.fromJSONArray(response);
+                for (int i = 0; i < tweets.size(); i++) {
+                    if (maxId == null || tweets.get(i).getUid() < maxId)
+                        maxId = tweets.get(i).getUid();
+                    if (sinceId==null || tweets.get(i).getUid() >  sinceId)
+                        sinceId = tweets.get(i).getUid();
+                }
                 aTweets.addAll(tweets);
-                Log.d("TWEET", aTweets.toString());
+                Log.d("TWEEEEEET", aTweets.toString());
                 swipeContainer.setRefreshing(false);
 
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("TWEET", errorResponse.toString());
+                Log.d("TWEEEEEET", errorResponse.toString());
             }
-        });
+        },sinceId);
 
     }
 

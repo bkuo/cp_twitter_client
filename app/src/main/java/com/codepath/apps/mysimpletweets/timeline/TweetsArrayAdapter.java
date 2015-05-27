@@ -34,6 +34,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewholder.tvUserName = (TextView) convertView.findViewById(R.id.tvUsername);
             viewholder.tvBody = (TextView) convertView.findViewById(R.id.tvBody);
             viewholder.tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
+            viewholder.tvHandle = (TextView) convertView.findViewById(R.id.tvHandle);
             convertView.setTag(viewholder);
         } else {
             viewholder = (ViewHolder) convertView.getTag();
@@ -47,7 +48,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                         DateUtils.FORMAT_ABBREV_RELATIVE
                 )).replaceFirst("(\\d+) (\\S).*", "$1$2")
         );
-
+        viewholder.tvHandle.setText("@"+tweet.getUser().getScreenName());
         viewholder.tvBody.setText(tweet.getBody());
         viewholder.ivProfileImage.setImageResource(0);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewholder.ivProfileImage);
@@ -58,6 +59,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         public TextView tvUserName;
         public ImageView ivProfileImage;
         public TextView tvBody;
+        public TextView tvHandle;
         public TextView tvCreatedAt;
     }
 }

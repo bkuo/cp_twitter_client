@@ -9,5 +9,5 @@
 
         />
     <item android:id="@+id/action_submit" android:title="@string/action_submit"
-        android:orderInCategory="100" app:showAsAction="never" android:icon="@drawable/ic_action_submit"/>
+        android:orderInCategory="100" app:showAsAction="always" android:icon="@drawable/ic_action_submit"/>
 </menu>

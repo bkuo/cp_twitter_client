@@ -16,6 +16,7 @@ public class Tweet {
     private long createdAt;
     private long uid;
     private String body;
+
     private User user;
 
     public static Tweet fromJSON(JSONObject jsonObject) {

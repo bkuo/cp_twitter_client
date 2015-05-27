@@ -1,10 +1,12 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
@@ -34,16 +36,26 @@ public class TwitterClient extends OAuthBaseClient {
     }
 
 
-
-    public void getHomeTimeline(AsyncHttpResponseHandler handler, Integer since_id) {
+    public void getHomeTimelineBefore(AsyncHttpResponseHandler handler, Long since_id) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", 25);
-        params.put("since_id", since_id == null ? 1 : since_id);
-        getClient().get(apiUrl, params, handler);
+        if (since_id != null)
+            apiUrl = apiUrl + "?since_id=" + since_id;
+//            params.put("since_id", since_id);
+        RequestHandle r = getClient().get(apiUrl, params, handler);
+        Log.d("TWEEEEEEET", handler.getRequestURI().toString());
     }
-    public void getHomeTimeline(AsyncHttpResponseHandler handler){
-        getHomeTimeline(handler, null);
+
+    public void getHomeTimelineSince(AsyncHttpResponseHandler handler, Long max_id) {
+        String apiUrl = getApiUrl("statuses/home_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        if (max_id != null)
+            apiUrl = apiUrl + "?max_id=" + max_id; //params.put("max_id", max_id);
+        RequestHandle r = getClient().get(apiUrl, params, handler);
+        Log.d("TWEEEEEEET", handler.getRequestURI().toString());
+
     }
 
     public void submitTweet(AsyncHttpResponseHandler handler, Tweet tweet) {
@@ -53,20 +65,19 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getCurrentScreenName(AsyncHttpResponseHandler handler){
+    public void getCurrentScreenName(AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("/account/settings.json");
-        getClient().get(apiUrl,  handler);
+        getClient().get(apiUrl, handler);
     }
-    public void getUserByScreenName(String screen_name, AsyncHttpResponseHandler handler){
-        String apiUrl = getApiUrl("/users/show.json?screen_name="+screen_name);
-//        RequestParams params = new RequestParams();
-//        params.put("screen_name", screen_name);
-         getClient().get(apiUrl, handler);
+
+    public void getUserByScreenName(String screen_name, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("/users/show.json?screen_name=" + screen_name);
+        getClient().get(apiUrl, handler);
 
     }
 
     /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
+     * 	  i.e getApiUrl("statuses/home_timeline.json");
 	 * 2. Define the parameters to pass to the request (query or body)
 	 *    i.e RequestParams params = new RequestParams("foo", "bar");
 	 * 3. Define the request method and make a call to the client
