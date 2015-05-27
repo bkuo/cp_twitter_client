@@ -21,6 +21,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -66,24 +67,63 @@ public class TimelineActivity extends ActionBarActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         swipeContainer.setProgressViewOffset(false, 100, 100);
+        requestCurrentUser();
         populateTimeline();
+    }
+
+    private void populateCurrentUser(String screen_name) {
+        client.getUserByScreenName(screen_name, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("TWEET", response.toString());
+                current_user = User.fromJson(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("TWEET", errorResponse.toString());
+            }
+        });
+
+    }
+
+    private void requestCurrentUser() {
+        client.getCurrentScreenName(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("TWEET", response.toString());
+                try {
+                    String screen_name = response.getString("screen_name");
+                    populateCurrentUser(screen_name);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("TWEET", errorResponse.toString());
+            }
+        });
+
     }
 
     private void populateTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("DEBUG", response.toString());
+                Log.d("TWEET", response.toString());
                 tweets = Tweet.fromJSONArray(response);
                 aTweets.addAll(tweets);
-                Log.d("DEBUG", aTweets.toString());
+                Log.d("TWEET", aTweets.toString());
                 swipeContainer.setRefreshing(false);
 
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
+                Log.d("TWEET", errorResponse.toString());
             }
         });
 

@@ -44,6 +44,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="what&apos;s happening?"
-        android:gravity="top" />
+        android:maxLength="140"
+        android:gravity="top"
+        android:singleLine="false"
+        android:hint="What&apos;s happening?" />
 </RelativeLayout>
