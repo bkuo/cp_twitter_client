@@ -115,9 +115,7 @@ public class ComposeActivity extends ActionBarActivity {
                     tweet);
 
 
-//            setResult(Activity.RESULT_OK, result);
         }
         return true;
-//        return super.onOptionsItemSelected(item);
     }
 }

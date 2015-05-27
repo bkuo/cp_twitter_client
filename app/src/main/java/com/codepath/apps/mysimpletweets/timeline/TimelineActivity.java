@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.compose.ComposeActivity;
+import com.codepath.apps.mysimpletweets.detail.TweetDetailActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
@@ -49,7 +51,7 @@ public class TimelineActivity extends ActionBarActivity {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("TWEEEEEEET",  "loading before " + maxId);
+                Log.d("TWEEEEEEET", "loading before " + maxId);
                 client.getHomeTimelineBefore(new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -58,7 +60,7 @@ public class TimelineActivity extends ActionBarActivity {
                         for (int i = 0; i < tweets.size(); i++) {
                             if (maxId == null || tweets.get(i).getUid() < maxId)
                                 maxId = tweets.get(i).getUid();
-                            if (sinceId==null || tweets.get(i).getUid() >  sinceId)
+                            if (sinceId == null || tweets.get(i).getUid() > sinceId)
                                 sinceId = tweets.get(i).getUid();
                         }
                         aTweets.addAll(tweets);
@@ -71,7 +73,8 @@ public class TimelineActivity extends ActionBarActivity {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         Log.d("TWEEEEEET", errorResponse.toString());
                     }
-                }, maxId);            }
+                }, maxId);
+            }
         });
         lvTweets.setAdapter(aTweets);
         swipeContainer.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
@@ -89,6 +92,15 @@ public class TimelineActivity extends ActionBarActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         swipeContainer.setProgressViewOffset(false, 100, 100);
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(TimelineActivity.this, TweetDetailActivity.class);
+                i.putExtra("tweet", (Tweet) parent.getItemAtPosition(position));
+                i.putExtra("current_user", current_user);
+                startActivity(i);
+            }
+        });
         requestCurrentUser();
         populateTimeline();
     }

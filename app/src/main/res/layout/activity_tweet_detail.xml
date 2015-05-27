@@ -1,74 +1,109 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codepath.apps.mysimpletweets.detail.TweetDetailActivity"
     >
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/ivAvatar"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="UserName"
-        android:id="@+id/tvUsername"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:layout_toEndOf="@+id/ivAvatar" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\@handle"
-        android:id="@+id/tvHandle"
-        android:layout_below="@+id/tvUsername"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:layout_toEndOf="@+id/ivAvatar" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="body"
-        android:id="@+id/tvBody"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/ivAvatar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10:27 AM - 21 May 15"
-        android:id="@+id/tvCreatedAt"
-        android:layout_below="@+id/tvBody"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4 retweets 17 favorites"
-        android:id="@+id/tvStats"
-        android:layout_below="@+id/tvCreatedAt"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/etReply"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:text="Reply to Username" />
+        android:layout_width="match_parent"
 
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:hint="Reply to Username"
+        android:singleLine="true"
+        android:maxLength="140"
+        />
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/etReply"
+        >
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+        >
+
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/ivAvatar"
+                android:layout_toRightOf="@+id/ivAvatar"
+                android:text="UserName" />
+
+            <TextView
+                android:id="@+id/tvHandle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvUsername"
+                android:layout_toEndOf="@+id/ivAvatar"
+                android:layout_toRightOf="@+id/ivAvatar"
+                android:text="\@handle" />
+
+            <TextView
+                android:id="@+id/tvBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/ivAvatar"
+                android:text="body" />
+
+            <TextView
+                android:id="@+id/tvCreatedAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvBody"
+                android:text="10:27 AM - 21 May 15" />
+
+            <TextView
+                android:id="@+id/tvStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvCreatedAt"
+                android:text="4 retweets 17 favorites"
+                android:gravity="center"
+                />
+
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout><!--<ImageView--><!--android:layout_width="50dp"--><!--android:layout_height="50dp"--><!--android:id="@+id/ivAvatar"--><!--android:layout_alignParentTop="true"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true" />-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="UserName"--><!--android:id="@+id/tvUsername"--><!--android:layout_alignParentTop="true"--><!--android:layout_toRightOf="@+id/ivAvatar"--><!--android:layout_toEndOf="@+id/ivAvatar" />-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="\@handle"--><!--android:id="@+id/tvHandle"--><!--android:layout_below="@+id/tvUsername"--><!--android:layout_toRightOf="@+id/ivAvatar"--><!--android:layout_toEndOf="@+id/ivAvatar" />-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="body"--><!--android:id="@+id/tvBody"--><!--android:layout_alignParentRight="true"--><!--android:layout_alignParentEnd="true"--><!--android:layout_below="@+id/ivAvatar"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true" />-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="10:27 AM - 21 May 15"--><!--android:id="@+id/tvCreatedAt"--><!--android:layout_below="@+id/tvBody"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true" />-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="4 retweets 17 favorites"--><!--android:id="@+id/tvStats"--><!--android:layout_below="@+id/tvCreatedAt"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:layout_alignParentRight="true"--><!--android:layout_alignParentEnd="true" />-->
+
