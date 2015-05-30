@@ -3,7 +3,6 @@ package com.codepath.apps.mysimpletweets.twitter_api;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.oauth.OAuthAsyncHttpClient;
@@ -78,12 +77,6 @@ public class TwitterClient extends OAuthBaseClient {
 
     }
 
-    @Override
-    public void authorize(Uri uri, OAuthAccessHandler handler) {
-        Log.d("TWEEEEEE", "authorize");
-        super.authorize(uri, handler);
-    }
-
 
     public TwitterAccessToken checkAccessToken() {
         boolean q = (this.prefs.contains("oauth_token") &&
@@ -115,7 +108,6 @@ public class TwitterClient extends OAuthBaseClient {
         if (max_id != null)
             apiUrl = apiUrl + "?max_id=" + max_id; //params.put("max_id", max_id);
         RequestHandle r = getClient().get(apiUrl, params, handler);
-
     }
 
     public void submitTweet(AsyncHttpResponseHandler handler, Tweet tweet) {
@@ -125,7 +117,6 @@ public class TwitterClient extends OAuthBaseClient {
         if (tweet.getIn_reply_to() != null)
             params.put("in_reply_to_status_id", tweet.getIn_reply_to());
         RequestHandle r = getClient().post(apiUrl, params, handler);
-
     }
 
 

@@ -5,3 +5,4 @@ package com.codepath.apps.mysimpletweets.fragments;
  */
 public class MentionsTimelineFragment extends TweetsListFragment {
 }
+

@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.twitter_api;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,10 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+//import android.view.MenuItem;
+
+//import android.view.Menu;
+
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
     private User current_user;
@@ -28,6 +33,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
     }
 
 
@@ -42,6 +48,9 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     // i.e Display application "homepage"
     @Override
     public void onLoginSuccess() {
+        Log.d("TWEEEEEET" , "onLoginSucces");
+
+//        Log.d("TWEEEEEET" , v.toString());
         showProgressBar();
         getClient().getUser(new JsonHttpResponseHandler() {
             @Override
@@ -77,19 +86,25 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d("TWEEEEEEEE", "onPrepareOptions");
         miActionProgressItem = menu.findItem(R.id.miActionProgress);
         // Extract the action-view from the menu item
         v = (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
-        return super.onPrepareOptionsMenu(menu);
+        Log.d("TWEEEEEET" , v.toString());
+        Log.d("TWEEEEEET", miActionProgressItem.toString());
+        return true;
     }
 
     public void showProgressBar() {
         // Show progress item
-        miActionProgressItem.setVisible(true);
+
+//        miActionProgressItem.setVisible(true);
     }
 
     public void hideProgressBar() {
         // Hide progress item
-        miActionProgressItem.setVisible(false);
+//        miActionProgressItem.setVisible(false);
     }
+
+
 }

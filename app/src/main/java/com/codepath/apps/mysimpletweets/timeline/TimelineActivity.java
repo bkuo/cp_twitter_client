@@ -2,33 +2,51 @@ package com.codepath.apps.mysimpletweets.timeline;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.compose.ComposeActivity;
+import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
+import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
+
+;
 
 public class TimelineActivity extends ActionBarActivity {
 
 
     private TweetsListFragment fragmentTweetsList;
     private User currentUser;
-
+    private TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        if(savedInstanceState==null)
-            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-        currentUser = (User)getIntent().getSerializableExtra("current_user");
+//        client = TwitterApplication.getRestClient();
+//        if (savedInstanceState == null)
+//            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+//        currentUser = (User) getIntent().getSerializableExtra("current_user");
+//        get viewpager
+//                set viewpager adapter
+//                find the sliding tabstrip
+//                attach t he tabstrip
+
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(vpPager);
+
     }
-
-
-
 
 
     @Override
@@ -54,4 +72,29 @@ public class TimelineActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+        private String[] tabTitles = {"Home", "Mentions"};
+
+        public TweetsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new HomeTimelineFragment();
+            }
+            if (position == 1) {
+                return new MentionsTimelineFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+    }
+
 }

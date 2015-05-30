@@ -38,6 +38,8 @@ public class TweetsListFragment extends Fragment {
     private User current_user;
     private Long maxId;
     private Long sinceId;
+    private JsonHttpResponseHandler timelineResponseHandler;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
@@ -48,29 +50,7 @@ public class TweetsListFragment extends Fragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("TWEEEEEEET", "loading before " + maxId);
-                client.getHomeTimelineBefore(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        Log.d("TWEEEEEET", response.toString());
-                        tweets = Tweet.fromJSONArray(response);
-                        for (int i = 0; i < tweets.size(); i++) {
-                            if (maxId == null || tweets.get(i).getUid() < maxId)
-                                maxId = tweets.get(i).getUid();
-                            if (sinceId == null || tweets.get(i).getUid() > sinceId)
-                                sinceId = tweets.get(i).getUid();
-                        }
-                        aTweets.addAll(tweets);
-                        Log.d("TWEEEEEET", aTweets.toString());
-                        swipeContainer.setRefreshing(false);
-
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        Log.d("TWEEEEEET", errorResponse.toString());
-                    }
-                }, maxId);
+                client.getHomeTimelineBefore(timelineResponseHandler(), maxId);
             }
         });
         lvTweets.setAdapter(aTweets);
@@ -101,9 +81,29 @@ public class TweetsListFragment extends Fragment {
         return v;
     }
 
-//    public void addAll(){
-//
-//    }
+    private JsonHttpResponseHandler timelineResponseHandler() {
+        if (timelineResponseHandler == null) {
+            timelineResponseHandler = new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    tweets = Tweet.fromJSONArray(response);
+                    for (int i = 0; i < tweets.size(); i++) {
+                        if (maxId == null || tweets.get(i).getUid() < maxId)
+                            maxId = tweets.get(i).getUid();
+                        if (sinceId == null || tweets.get(i).getUid() > sinceId)
+                            sinceId = tweets.get(i).getUid();
+                    }
+                    aTweets.addAll(tweets);
+                    swipeContainer.setRefreshing(false);
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("TWEEEEEET", errorResponse.toString());
+                }
+            };
+        }
+        return timelineResponseHandler;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,30 +111,10 @@ public class TweetsListFragment extends Fragment {
 
 
     }
+
     private void populateTimeline() {
         Log.d("TWEEEEEEET", "loading after " + sinceId);
-        client.getHomeTimelineSince(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("TWEEEEEET", response.toString());
-                tweets = Tweet.fromJSONArray(response);
-                for (int i = 0; i < tweets.size(); i++) {
-                    if (maxId == null || tweets.get(i).getUid() < maxId)
-                        maxId = tweets.get(i).getUid();
-                    if (sinceId == null || tweets.get(i).getUid() > sinceId)
-                        sinceId = tweets.get(i).getUid();
-                }
-                aTweets.addAll(tweets);
-                Log.d("TWEEEEEET", aTweets.toString());
-                swipeContainer.setRefreshing(false);
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("TWEEEEEET", errorResponse.toString());
-            }
-        }, sinceId);
+        client.getHomeTimelineSince(timelineResponseHandler(), sinceId);
 
     }
 }
