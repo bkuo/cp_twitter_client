@@ -30,6 +30,7 @@ import java.util.ArrayList;
  */
 public class TweetsListFragment extends Fragment {
     public TweetsListFragment(TwitterClient.Timeline timeline){
+        super();
         this.timeline = timeline;
     }
     private TwitterClient.Timeline timeline;
@@ -81,6 +82,7 @@ public class TweetsListFragment extends Fragment {
                 startActivity(i);
             }
         });
+        populateTimeline();
         return v;
     }
 

@@ -32,7 +32,7 @@ public class TimelineActivity extends ActionBarActivity {
         setContentView(R.layout.activity_timeline);
 
         client = TwitterApplication.getRestClient();
-//            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+
         currentUser = (User) getIntent().getSerializableExtra("current_user");
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -50,12 +50,6 @@ public class TimelineActivity extends ActionBarActivity {
         if (savedInstanceState == null) viewPager.setCurrentItem(0);
 
     }
-
-//    private void displayHomeTimeline() {
-//        if(fgHomeTimeLine==null) {
-//            fgHomeTimeLine = new TweetsListFragment(client.home_timeline());
-//        }
-//    }
 
 
     @Override
