@@ -29,6 +29,10 @@ import java.util.ArrayList;
  * Created by bkuo on 5/27/15.
  */
 public class TweetsListFragment extends Fragment {
+    public TweetsListFragment(TwitterClient.Timeline timeline){
+        this.timeline = timeline;
+    }
+    private TwitterClient.Timeline timeline;
     private ListView lvTweets;
     private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet> tweets;
@@ -49,28 +53,7 @@ public class TweetsListFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 Log.d("TWEEEEEEET", "loading before " + maxId);
-                client.getHomeTimelineBefore(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        Log.d("TWEEEEEET", response.toString());
-                        tweets = Tweet.fromJSONArray(response);
-                        for (int i = 0; i < tweets.size(); i++) {
-                            if (maxId == null || tweets.get(i).getUid() < maxId)
-                                maxId = tweets.get(i).getUid();
-                            if (sinceId == null || tweets.get(i).getUid() > sinceId)
-                                sinceId = tweets.get(i).getUid();
-                        }
-                        aTweets.addAll(tweets);
-                        Log.d("TWEEEEEET", aTweets.toString());
-                        swipeContainer.setRefreshing(false);
-
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        Log.d("TWEEEEEET", errorResponse.toString());
-                    }
-                }, maxId);
+                timeline.tweets_before(tweets_handler(), maxId);
             }
         });
         lvTweets.setAdapter(aTweets);
@@ -101,19 +84,8 @@ public class TweetsListFragment extends Fragment {
         return v;
     }
 
-//    public void addAll(){
-//
-//    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-    private void populateTimeline() {
-        Log.d("TWEEEEEEET", "loading after " + sinceId);
-        client.getHomeTimelineSince(new JsonHttpResponseHandler() {
+    private JsonHttpResponseHandler tweets_handler() {
+        return new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("TWEEEEEET", response.toString());
@@ -134,7 +106,18 @@ public class TweetsListFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("TWEEEEEET", errorResponse.toString());
             }
-        }, sinceId);
+        };
+
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
+    private void populateTimeline() {
+        Log.d("TWEEEEEEET", "loading after " + sinceId);
+        timeline.tweets_since(tweets_handler(), sinceId);
 
     }
 }
