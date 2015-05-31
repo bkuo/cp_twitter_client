@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.twitter_api;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        Log.d("TWEEEEEEEEEEEEE", miActionProgressItem.toString());
         // Extract the action-view from the menu item
         v = (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
         return super.onPrepareOptionsMenu(menu);
@@ -85,11 +87,11 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
     public void showProgressBar() {
         // Show progress item
-        miActionProgressItem.setVisible(true);
+        if(miActionProgressItem!=null) miActionProgressItem.setVisible(true);
     }
 
     public void hideProgressBar() {
         // Hide progress item
-        miActionProgressItem.setVisible(false);
+        if(miActionProgressItem!=null) miActionProgressItem.setVisible(false);
     }
 }
