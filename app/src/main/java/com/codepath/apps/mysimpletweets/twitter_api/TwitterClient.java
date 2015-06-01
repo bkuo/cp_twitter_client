@@ -71,7 +71,7 @@ public class TwitterClient extends OAuthBaseClient {
                 TwitterClient.this.accessHandler.onLoginFailure(e);
             }
         });
-        if(this.checkAccessToken() != null) {
+        if (this.checkAccessToken() != null) {
             this.client.setAccessToken(this.checkAccessToken());
         }
 
@@ -99,47 +99,63 @@ public class TwitterClient extends OAuthBaseClient {
         return t;
     }
 
-    public class Timeline{
-        private  String apiUrl;
-        Timeline(String resource_path){
+    public String getScreenName() {
+        return getAccessToken().getScreen_name();
+    }
+
+    public class Timeline {
+        private String apiUrl;
+        private String lookup_key;
+        private String lookup_value;
+
+        Timeline(String resource_path) {
             apiUrl = resource_path;
         }
+
+        Timeline(String resource_path, String lookup_key, String lookup_value) {
+            this.apiUrl = resource_path;
+            this.lookup_key = lookup_key;
+            this.lookup_value = lookup_value;
+        }
+
         public void tweets_since(AsyncHttpResponseHandler handler, Long since_id) {
             RequestParams params = new RequestParams();
             params.put("count", 100);
-            String qs =  (since_id != null) ? "?count=100&since_id=" + since_id : "";
-            getClient().get(apiUrl+qs, params, handler);
+            if(since_id !=null) params.put("since_id", since_id);
+            if(lookup_key != null && lookup_value!=null) params.put(lookup_key, lookup_value);
+//            String qs = (since_id != null) ? "?count=100&since_id=" + since_id : "";
+            getClient().get(apiUrl, params, handler);
         }
+
         public void tweets_before(AsyncHttpResponseHandler handler, Long max_id) {
             RequestParams params = new RequestParams();
             params.put("count", 100);
-            String qs =  (max_id != null) ? "?count=100&max_id=" + max_id : "";
-            getClient().get(apiUrl+qs, params, handler);
+            if(max_id !=null) params.put("max_id", max_id);
+            if(lookup_key != null && lookup_value!=null) params.put(lookup_key, lookup_value);
+//            String qs = (max_id != null) ? "?count=100&max_id=" + max_id : "";
+            getClient().get(apiUrl , params, handler);
         }
 
     }
-    public Timeline mentions_timeline(){  return new Timeline(getApiUrl("statuses/mentions_timeline.json"));}
-    public Timeline home_timeline(){return  new Timeline(getApiUrl("statuses/home_timeline.json"));}
 
-//
-//    public void getHomeTimelineSince(AsyncHttpResponseHandler handler, Long since_id) {
-//        String apiUrl = getApiUrl("statuses/home_timeline.json");
-//        RequestParams params = new RequestParams();
-//        params.put("count", 25);
-//        if (since_id != null)
-//            apiUrl = apiUrl + "?since_id=" + since_id;
-//        RequestHandle r = getClient().get(apiUrl, params, handler);
-//    }
-//
-//    public void getHomeTimelineBefore(AsyncHttpResponseHandler handler, Long max_id) {
-//        String apiUrl = getApiUrl("statuses/home_timeline.json");
-//        RequestParams params = new RequestParams();
-//        params.put("count", 25);
-//        if (max_id != null)
-//            apiUrl = apiUrl + "?max_id=" + max_id; //params.put("max_id", max_id);
-//        RequestHandle r = getClient().get(apiUrl, params, handler);
-//
-//    }
+    public Timeline mentions_timeline() {
+        return new Timeline(getApiUrl("statuses/mentions_timeline.json"));
+    }
+
+    public Timeline home_timeline() {
+        return new Timeline(getApiUrl("statuses/home_timeline.json"));
+    }
+
+    public Timeline user_timeline() {
+        return new Timeline(getApiUrl("statuses/user_timeline.json"));
+    }
+    public Timeline user_timeline_by_screen_name(String screenName) {
+        return new Timeline(getApiUrl("statuses/user_timeline.json"), "screen_name", screenName);
+    }
+    public Timeline user_timeline_by_user_id(String user_id) {
+        return new Timeline(getApiUrl("statuses/user_timeline.json"), "user_id", user_id);
+    }
+
 
     public void submitTweet(AsyncHttpResponseHandler handler, Tweet tweet) {
         String apiUrl = getApiUrl("/statuses/update.json");

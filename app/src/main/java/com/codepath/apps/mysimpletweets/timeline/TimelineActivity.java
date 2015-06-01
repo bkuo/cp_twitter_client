@@ -14,6 +14,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.compose.ComposeActivity;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.profile.ProfileActivity;
 import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
 
 public class TimelineActivity extends ActionBarActivity {
@@ -51,6 +52,12 @@ public class TimelineActivity extends ActionBarActivity {
 
     }
 
+    public void onProfileView(MenuItem mi) {
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("screen_name", client.getScreenName());
+        i.putExtra("user", currentUser);
+        startActivity(i);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,7 +76,7 @@ public class TimelineActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_compose) {
             Intent i = new Intent(this, ComposeActivity.class);
-            i.putExtra("data", currentUser);
+            i.putExtra("user", currentUser);
             startActivity(i);
         }
 

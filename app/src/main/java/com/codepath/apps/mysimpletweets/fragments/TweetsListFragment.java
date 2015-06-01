@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * Created by bkuo on 5/27/15.
  */
 public class TweetsListFragment extends Fragment {
+    public TweetsListFragment(){}
     public TweetsListFragment(TwitterClient.Timeline timeline){
         super();
         this.timeline = timeline;
@@ -50,13 +51,13 @@ public class TweetsListFragment extends Fragment {
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         tweets = new ArrayList<Tweet>();
         aTweets = new TweetsArrayAdapter(getActivity(), tweets);
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("TWEEEEEEET", "loading before " + maxId);
-                timeline.tweets_before(tweets_handler(), maxId);
-            }
-        });
+//        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount) {
+//                Log.d("TWEEEEEEET", "loading before " + maxId);
+//                timeline.tweets_before(tweets_handler(), maxId);
+//            }
+//        });
         lvTweets.setAdapter(aTweets);
         swipeContainer.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
@@ -78,7 +79,7 @@ public class TweetsListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity(), TweetDetailActivity.class);
                 i.putExtra("tweet", (Tweet) parent.getItemAtPosition(position));
-                i.putExtra("current_user", current_user);
+                i.putExtra("user",  ((Tweet) parent.getItemAtPosition(position)).getUser());
                 startActivity(i);
             }
         });

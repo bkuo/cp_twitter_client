@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.detail;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.util.Log;
@@ -8,17 +9,16 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
-import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
+import com.codepath.apps.mysimpletweets.fragments.UserCardFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -35,24 +35,33 @@ public class TweetDetailActivity extends ActionBarActivity {
     private TextView tvBody;
     private TextView tvCreatedAt;
     private TwitterClient client;
+    private UserCardFragment frUserCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_detail);
         tweet = (Tweet) getIntent().getSerializableExtra("tweet");
-        current_user = (User) getIntent().getSerializableExtra("current_user");
-
-        TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
-        TextView tvHandle = (TextView) findViewById(R.id.tvHandle);
+        current_user = (User) getIntent().getSerializableExtra("user");
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            frTweets = new TweetsListFragment(client.user_timeline_by_screen_name(screenName));
+//            ft.replace(R.id.flContainer, frTweets);
+            frUserCard = new UserCardFragment();
+            frUserCard.setArguments(getIntent().getExtras());
+            ft.replace(R.id.flUserCard, frUserCard);
+            ft.commit();
+        }
+//        TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
+//        TextView tvHandle = (TextView) findViewById(R.id.tvHandle);
         tvCreatedAt = (TextView) findViewById(R.id.tvCreatedAt);
 
         tvCreatedAt.setText( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(tweet.getCreatedAt())));
-        tvUsername.setText(tweet.getUser().getName());
-        tvHandle.setText("@" + tweet.getUser().getScreenName());
+//        tvUsername.setText(tweet.getUser().getName());
+//        tvHandle.setText("@" + tweet.getUser().getScreenName());
         tvBody = (TextView)findViewById(R.id.tvBody);
         tvBody.setText(tweet.getBody());
-        ImageView ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
+//        ImageView ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
         tvStats =(TextView) findViewById(R.id.tvStats);
         tvStats.setText(Html.fromHtml(
                 "<b>"+tweet.getRetweet_count() + "</b> RETWEETS"+
@@ -87,7 +96,8 @@ public class TweetDetailActivity extends ActionBarActivity {
                 return false;
             }
         });
-        Picasso.with(this).load(tweet.getUser().getProfileImageUrl()).into(ivAvatar);    }
+//        Picasso.with(this).load(tweet.getUser().getProfileImageUrl()).into(ivAvatar);
+   }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
