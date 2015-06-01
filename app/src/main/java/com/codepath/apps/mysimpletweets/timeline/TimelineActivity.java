@@ -39,8 +39,8 @@ public class TimelineActivity extends ActionBarActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         String[] titles = {"home", "mentions"};
         Fragment[] fragments = {
-                new TweetsListFragment(client.home_timeline()),
-                new TweetsListFragment(client.mentions_timeline())
+                 TweetsListFragment.fromBundle(client.home_timeline().toBundle()),
+                 TweetsListFragment.fromBundle(client.mentions_timeline().toBundle())
         };
         viewPager.setAdapter(new SimpleTweetsFragmentPagerAdapter(getSupportFragmentManager(), titles, fragments));
 

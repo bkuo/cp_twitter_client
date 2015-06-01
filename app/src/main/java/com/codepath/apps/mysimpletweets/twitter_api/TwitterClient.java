@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.twitter_api;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -112,6 +113,10 @@ public class TwitterClient extends OAuthBaseClient {
             apiUrl = resource_path;
         }
 
+        Timeline(Bundle bundle) {
+            this(bundle.getString("apiUrl"), bundle.getString("lookup_key"), bundle.getString("lookup_value"));
+        }
+
         Timeline(String resource_path, String lookup_key, String lookup_value) {
             this.apiUrl = resource_path;
             this.lookup_key = lookup_key;
@@ -121,8 +126,8 @@ public class TwitterClient extends OAuthBaseClient {
         public void tweets_since(AsyncHttpResponseHandler handler, Long since_id) {
             RequestParams params = new RequestParams();
             params.put("count", 100);
-            if(since_id !=null) params.put("since_id", since_id);
-            if(lookup_key != null && lookup_value!=null) params.put(lookup_key, lookup_value);
+            if (since_id != null) params.put("since_id", since_id);
+            if (lookup_key != null && lookup_value != null) params.put(lookup_key, lookup_value);
 //            String qs = (since_id != null) ? "?count=100&since_id=" + since_id : "";
             getClient().get(apiUrl, params, handler);
         }
@@ -130,12 +135,23 @@ public class TwitterClient extends OAuthBaseClient {
         public void tweets_before(AsyncHttpResponseHandler handler, Long max_id) {
             RequestParams params = new RequestParams();
             params.put("count", 100);
-            if(max_id !=null) params.put("max_id", max_id);
-            if(lookup_key != null && lookup_value!=null) params.put(lookup_key, lookup_value);
+            if (max_id != null) params.put("max_id", max_id);
+            if (lookup_key != null && lookup_value != null) params.put(lookup_key, lookup_value);
 //            String qs = (max_id != null) ? "?count=100&max_id=" + max_id : "";
-            getClient().get(apiUrl , params, handler);
+            getClient().get(apiUrl, params, handler);
         }
 
+        public Bundle toBundle() {
+            Bundle bundle = new Bundle();
+            bundle.putString("apiUrl", apiUrl);
+            bundle.putString("lookup_key", lookup_key);
+            bundle.putString("lookup_value", lookup_value);
+            return bundle;
+        }
+    }
+
+    public Timeline timeline_from_bundle(Bundle bundle) {
+        return new Timeline(bundle);
     }
 
     public Timeline mentions_timeline() {
@@ -149,9 +165,11 @@ public class TwitterClient extends OAuthBaseClient {
     public Timeline user_timeline() {
         return new Timeline(getApiUrl("statuses/user_timeline.json"));
     }
+
     public Timeline user_timeline_by_screen_name(String screenName) {
         return new Timeline(getApiUrl("statuses/user_timeline.json"), "screen_name", screenName);
     }
+
     public Timeline user_timeline_by_user_id(String user_id) {
         return new Timeline(getApiUrl("statuses/user_timeline.json"), "user_id", user_id);
     }

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.detail.TweetDetailActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
@@ -30,10 +31,16 @@ import java.util.ArrayList;
  */
 public class TweetsListFragment extends Fragment {
     public TweetsListFragment(){}
-    public TweetsListFragment(TwitterClient.Timeline timeline){
-        super();
-        this.timeline = timeline;
+//    public TweetsListFragment(TwitterClient.Timeline timeline){
+//        super();
+//        this.timeline = timeline;
+//    }
+    public static TweetsListFragment fromBundle(Bundle bundle){
+        TweetsListFragment t = new TweetsListFragment();
+        t.setArguments(bundle);
+        return t;
     }
+
     private TwitterClient.Timeline timeline;
     private ListView lvTweets;
     private TweetsArrayAdapter aTweets;
@@ -115,8 +122,8 @@ public class TweetsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        client = TwitterApplication.getRestClient();
+        timeline = client.timeline_from_bundle(getArguments());
     }
     private void populateTimeline() {
         Log.d("TWEEEEEEET", "loading after " + sinceId);

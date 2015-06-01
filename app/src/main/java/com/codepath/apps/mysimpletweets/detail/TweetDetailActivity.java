@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserCardFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
@@ -36,6 +37,7 @@ public class TweetDetailActivity extends ActionBarActivity {
     private TextView tvCreatedAt;
     private TwitterClient client;
     private UserCardFragment frUserCard;
+    private TweetsListFragment frTweets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class TweetDetailActivity extends ActionBarActivity {
         current_user = (User) getIntent().getSerializableExtra("user");
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            frTweets = new TweetsListFragment(client.user_timeline_by_screen_name(screenName));
+//            frTweets = TweetsListFragment.fromBundle(client.user_timeline_by_screen_name(screenName).toBundle());
 //            ft.replace(R.id.flContainer, frTweets);
             frUserCard = new UserCardFragment();
             frUserCard.setArguments(getIntent().getExtras());
@@ -97,6 +99,7 @@ public class TweetDetailActivity extends ActionBarActivity {
             }
         });
 //        Picasso.with(this).load(tweet.getUser().getProfileImageUrl()).into(ivAvatar);
+
    }
 
     @Override

@@ -27,7 +27,7 @@ public class ProfileActivity extends ActionBarActivity {
         client = TwitterApplication.getRestClient();
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            frTweets = new TweetsListFragment(client.user_timeline_by_screen_name(screenName));
+            frTweets = TweetsListFragment.fromBundle(client.user_timeline_by_screen_name(screenName).toBundle());
             ft.replace(R.id.flContainer, frTweets);
             frUserCard = new UserCardFragment();
             frUserCard.setArguments(getIntent().getExtras());
