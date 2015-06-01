@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.oauth.OAuthAsyncHttpClient;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -162,8 +163,8 @@ public class TwitterClient extends OAuthBaseClient {
         return new Timeline(getApiUrl("statuses/home_timeline.json"));
     }
 
-    public Timeline user_timeline() {
-        return new Timeline(getApiUrl("statuses/user_timeline.json"));
+    public Timeline user_timeline(User user) {
+        return new Timeline(getApiUrl("statuses/user_timeline.json"), "screen_name", user.getScreenName());
     }
 
     public Timeline user_timeline_by_screen_name(String screenName) {
@@ -192,6 +193,10 @@ public class TwitterClient extends OAuthBaseClient {
 
     }
 
+    public void getUserByScreenName(AsyncHttpResponseHandler handler, String screenName) {
+        String apiUrl = getApiUrl("/users/show.json?screen_name=" + screenName);
+        getClient().get(apiUrl, handler);
+    }
     /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
      * 	  i.e getApiUrl("statuses/home_timeline.json");
 	 * 2. Define the parameters to pass to the request (query or body)

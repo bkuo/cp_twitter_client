@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets.timeline;
+package com.codepath.apps.mysimpletweets.home;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

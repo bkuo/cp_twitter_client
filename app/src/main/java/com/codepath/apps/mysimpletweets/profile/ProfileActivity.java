@@ -3,13 +3,16 @@ package com.codepath.apps.mysimpletweets.profile;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
-import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
+import com.codepath.apps.mysimpletweets.timeline.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserCardFragment;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
 
 public class ProfileActivity extends ActionBarActivity {
@@ -17,24 +20,39 @@ public class ProfileActivity extends ActionBarActivity {
     private TwitterClient client;
     private TweetsListFragment frTweets;
     private UserCardFragment frUserCard;
+    private TextView tvFollowersCount;
+    private TextView tvFollowingCount;
+    private TextView tvTweetCount;
+    private User user;
+    private TextView tvDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        String screenName = getIntent().getStringExtra("screen_name");
+        user = (User) getIntent().getSerializableExtra("user");
+
         client = TwitterApplication.getRestClient();
+//        User user = client.getUser();
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            frTweets = TweetsListFragment.fromBundle(client.user_timeline_by_screen_name(screenName).toBundle());
+            frTweets = TweetsListFragment.fromBundle(client.user_timeline(user).toBundle());
             ft.replace(R.id.flContainer, frTweets);
             frUserCard = new UserCardFragment();
             frUserCard.setArguments(getIntent().getExtras());
             ft.replace(R.id.flUserCard, frUserCard);
             ft.commit();
         }
-        setTitle("@"+screenName);
+        setTitle("@" + user.getScreenName());
+        tvFollowersCount = (TextView) findViewById(R.id.tvFollowerCount);
+        tvFollowingCount = (TextView) findViewById(R.id.tvFollowingCount);
+        tvTweetCount = (TextView) findViewById(R.id.tvTweetCount);
+        tvDescription = (TextView) findViewById(R.id.tvDescription);
+        tvDescription.setText(user.getDescription());
+        tvTweetCount.setText(Html.fromHtml("<b>" + user.getTweetCount() + "</b><br>Tweets"));
+        tvFollowersCount.setText(Html.fromHtml("<b>" + user.getFollowersCount() + "</b><br>Followers"));
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets.timeline;
+package com.codepath.apps.mysimpletweets.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.compose.ComposeActivity;
-import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
+import com.codepath.apps.mysimpletweets.timeline.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.profile.ProfileActivity;
 import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;

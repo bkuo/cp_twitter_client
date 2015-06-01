@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets.fragments;
+package com.codepath.apps.mysimpletweets.timeline;
 
 import android.widget.AbsListView;
 import android.widget.GridView;

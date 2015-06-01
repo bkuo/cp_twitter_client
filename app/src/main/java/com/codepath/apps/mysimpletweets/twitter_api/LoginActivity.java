@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.timeline.TimelineActivity;
+import com.codepath.apps.mysimpletweets.home.TimelineActivity;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
 

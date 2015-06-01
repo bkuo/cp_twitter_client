@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets.fragments;
+package com.codepath.apps.mysimpletweets.timeline;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.detail.TweetDetailActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.timeline.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -50,6 +49,8 @@ public class TweetsListFragment extends Fragment {
 
     private User current_user;
     private Long maxId;
+    private boolean finalmaxId = false;
+
     private Long sinceId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,13 +59,24 @@ public class TweetsListFragment extends Fragment {
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         tweets = new ArrayList<Tweet>();
         aTweets = new TweetsArrayAdapter(getActivity(), tweets);
-//        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                Log.d("TWEEEEEEET", "loading before " + maxId);
-//                timeline.tweets_before(tweets_handler(), maxId);
+
+//        , new onAvatarClick() {
+//            public void onClick() {
+//                Intent i = new Intent(getActivity(), ProfileActivity.class);
+//                i.putExtras(getArguments());
+//                startActivity(i);
+//
+//
 //            }
+//
 //        });
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d("TWEEEEEEET", "loading before " + maxId);
+                timeline.tweets_before(tweets_handler(), maxId);
+            }
+        });
         lvTweets.setAdapter(aTweets);
         swipeContainer.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
@@ -81,12 +93,14 @@ public class TweetsListFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         swipeContainer.setProgressViewOffset(false, 100, 100);
+
         lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), TweetDetailActivity.class);
+                Intent i;
+                i = new Intent(getActivity(), TweetDetailActivity.class);
                 i.putExtra("tweet", (Tweet) parent.getItemAtPosition(position));
-                i.putExtra("user",  ((Tweet) parent.getItemAtPosition(position)).getUser());
+                i.putExtra("user", ((Tweet) parent.getItemAtPosition(position)).getUser());
                 startActivity(i);
             }
         });
@@ -128,6 +142,6 @@ public class TweetsListFragment extends Fragment {
     private void populateTimeline() {
         Log.d("TWEEEEEEET", "loading after " + sinceId);
         timeline.tweets_since(tweets_handler(), sinceId);
-
     }
+
 }

@@ -22,6 +22,8 @@ public class UserCardFragment extends Fragment{
     private TextView tvUsername;
     private ImageView ivAvatar;
     private User user ;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.user_card, container, false);
@@ -31,6 +33,7 @@ public class UserCardFragment extends Fragment{
         tvHandle = (TextView) v.findViewById(R.id.tvHandle);
         tvUsername.setText(user.getName());
         tvHandle.setText("@" + user.getScreenName());
+
         Picasso.with(getActivity()).load(user.getProfileImageUrl()).into(ivAvatar);
 
         return v;
