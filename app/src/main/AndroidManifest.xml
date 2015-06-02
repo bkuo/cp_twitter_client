@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".timeline.TimelineActivity"
+            android:name=".home.TimelineActivity"
             android:label="@string/title_activity_timeline" >
         </activity>
         <activity

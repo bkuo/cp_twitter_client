@@ -41,14 +41,6 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewholder.tvHandle = (TextView) convertView.findViewById(R.id.tvHandle);
 
             convertView.setTag(viewholder);
-//            ViewGroup vg = (ViewGroup) convertView;
-//            vg.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-//            viewholder.tvBody.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View v) {
-////                 convertView.callOnClick();
-//                }
-//            });
 
         } else {
             viewholder = (ViewHolder) convertView.getTag();
