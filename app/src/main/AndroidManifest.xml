@@ -64,6 +64,14 @@
             android:name=".profile.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name=".followlist.FollowListActivity"
+            android:label="@string/title_activity_follow_list" >
+        </activity>
+        <activity
+            android:name=".tweeters.TweeterListActivity"
+            android:label="@string/title_activity_tweeter_list" >
+        </activity>
     </application>
 
 </manifest>
