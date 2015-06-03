@@ -12,15 +12,14 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.compose.ComposeActivity;
-import com.codepath.apps.mysimpletweets.timeline.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.profile.ProfileActivity;
+import com.codepath.apps.mysimpletweets.timeline.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.twitter_api.TwitterClient;
 
 public class TimelineActivity extends ActionBarActivity {
 
 
-    //    private TweetsListFragment fragmentTweetsList;
     private Fragment fgHomeTimeLine;
     private Fragment fgMentionsTimeLine;
     private User currentUser;
@@ -49,7 +48,6 @@ public class TimelineActivity extends ActionBarActivity {
         // Attach the view pager to the tab strip
         tabsStrip.setViewPager(viewPager);
         if (savedInstanceState == null) viewPager.setCurrentItem(0);
-
     }
 
     public void onProfileView(MenuItem mi) {

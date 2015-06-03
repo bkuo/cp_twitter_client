@@ -60,21 +60,12 @@ public class TweetsListFragment extends Fragment {
         tweets = new ArrayList<Tweet>();
         aTweets = new TweetsArrayAdapter(getActivity(), tweets);
 
-//        , new onAvatarClick() {
-//            public void onClick() {
-//                Intent i = new Intent(getActivity(), ProfileActivity.class);
-//                i.putExtras(getArguments());
-//                startActivity(i);
-//
-//
-//            }
-//
-//        });
+
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 Log.d("TWEEEEEEET", "loading before " + maxId);
-                timeline.tweets_before(tweets_handler(), maxId);
+                if(finalmaxId==false) timeline.tweets_before(wrapped_tweets_handler(), maxId);
             }
         });
         lvTweets.setAdapter(aTweets);
@@ -108,6 +99,24 @@ public class TweetsListFragment extends Fragment {
         return v;
     }
 
+    private class WrappedHandler extends JsonHttpResponseHandler {
+        private JsonHttpResponseHandler handler;
+
+        public WrappedHandler(JsonHttpResponseHandler handler) {
+            this.handler = handler;
+        }
+        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            handler.onSuccess( statusCode, headers, response);
+            if(response.length()<2)
+                finalmaxId = true;
+        }
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            handler.onFailure( statusCode, headers, throwable, errorResponse);
+        }
+    }
+    private JsonHttpResponseHandler wrapped_tweets_handler() {
+        return new WrappedHandler(tweets_handler());
+    }
     private JsonHttpResponseHandler tweets_handler() {
         return new JsonHttpResponseHandler() {
             @Override
