@@ -55,6 +55,7 @@ Describe any challenges encountered while building the app.
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip) nice ViewPager implementation
 
 ## License
 
