@@ -175,6 +175,10 @@ public class TwitterClient extends OAuthBaseClient {
         return new Timeline(getApiUrl("statuses/user_timeline.json"), "user_id", user_id);
     }
 
+    public Timeline search(String query){
+        return new Timeline(getApiUrl("search/tweets"), "q", query);
+    }
+
 
     public void submitTweet(AsyncHttpResponseHandler handler, Tweet tweet) {
         String apiUrl = getApiUrl("/statuses/update.json");

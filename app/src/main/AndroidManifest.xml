@@ -64,6 +64,14 @@
             android:name=".profile.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name=".timeline.SearchResultsActivity"
+            android:label="@string/title_activity_search_results"
+            android:parentActivityName=".home.TimelineActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.codepath.apps.mysimpletweets.home.TimelineActivity" />
+        </activity>
     </application>
 
 </manifest>
